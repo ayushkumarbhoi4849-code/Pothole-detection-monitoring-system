@@ -1,0 +1,129 @@
+{
+  "survey_id": "SURVEY_2026_09_15_001",
+  "survey_name": "NH-40 Kadapa Bypass - Section A",
+  "date": "2026-09-15T09:15:00Z",
+  "drone_id": "DJI_M300_01",
+  "gsd_cm_per_px": 2.1,
+  "area_covered_sqm": 18500,
+  "segments": [
+    {
+      "segment_id": "SEG_001",
+      "start_lat": 14.4753, "start_lon": 78.8298,
+      "end_lat": 14.4771, "end_lon": 78.8312,
+      "length_m": 240.0,
+      "pdi": 91.0,
+      "thermal_score": 0.08,
+      "defects": []
+    },
+    {
+      "segment_id": "SEG_002",
+      "start_lat": 14.4771, "start_lon": 78.8312,
+      "end_lat": 14.4789, "end_lon": 78.8326,
+      "length_m": 235.0,
+      "pdi": 68.5,
+      "thermal_score": 0.31,
+      "defects": [
+        {
+          "defect_id": "DEF_001",
+          "type": "crack",
+          "lat": 14.4778, "lon": 78.8318,
+          "severity": "moderate",
+          "area_sqcm": 620.0,
+          "depth_cm": 1.1,
+          "thermal_anomaly": false,
+          "confidence": 0.87
+        },
+        {
+          "defect_id": "DEF_002",
+          "type": "pothole",
+          "lat": 14.4784, "lon": 78.8322,
+          "severity": "moderate",
+          "area_sqcm": 310.5,
+          "depth_cm": 2.8,
+          "thermal_anomaly": true,
+          "confidence": 0.93
+        }
+      ]
+    },
+    {
+      "segment_id": "SEG_003",
+      "start_lat": 14.4789, "start_lon": 78.8326,
+      "end_lat": 14.4805, "end_lon": 78.8341,
+      "length_m": 218.0,
+      "pdi": 39.0,
+      "thermal_score": 0.62,
+      "defects": [
+        {
+          "defect_id": "DEF_003",
+          "type": "pothole",
+          "lat": 14.4795, "lon": 78.8331,
+          "severity": "high",
+          "area_sqcm": 890.2,
+          "depth_cm": 6.4,
+          "thermal_anomaly": true,
+          "confidence": 0.96
+        },
+        {
+          "defect_id": "DEF_004",
+          "type": "pothole",
+          "lat": 14.4799, "lon": 78.8335,
+          "severity": "high",
+          "area_sqcm": 745.0,
+          "depth_cm": 5.1,
+          "thermal_anomaly": true,
+          "confidence": 0.90
+        },
+        {
+          "defect_id": "DEF_005",
+          "type": "crack",
+          "lat": 14.4802, "lon": 78.8338,
+          "severity": "high",
+          "area_sqcm": 1200.0,
+          "depth_cm": 2.0,
+          "thermal_anomaly": false,
+          "confidence": 0.84
+        }
+      ]
+    },
+    {
+      "segment_id": "SEG_004",
+      "start_lat": 14.4805, "start_lon": 78.8341,
+      "end_lat": 14.4822, "end_lon": 78.8357,
+      "length_m": 230.0,
+      "pdi": 55.0,
+      "thermal_score": 0.44,
+      "defects": [
+        {
+          "defect_id": "DEF_006",
+          "type": "raveling",
+          "lat": 14.4813, "lon": 78.8349,
+          "severity": "moderate",
+          "area_sqcm": 400.0,
+          "depth_cm": 0.5,
+          "thermal_anomaly": false,
+          "confidence": 0.78
+        }
+      ]
+    },
+    {
+      "segment_id": "SEG_005",
+      "start_lat": 14.4822, "start_lon": 78.8357,
+      "end_lat": 14.4840, "end_lon": 78.8372,
+      "length_m": 236.0,
+      "pdi": 85.0,
+      "thermal_score": 0.12,
+      "defects": [
+        {
+          "defect_id": "DEF_007",
+          "type": "crack",
+          "lat": 14.4831, "lon": 78.8365,
+          "severity": "low",
+          "area_sqcm": 150.0,
+          "depth_cm": 0.4,
+          "thermal_anomaly": false,
+          "confidence": 0.71
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+{
+  "survey_id": "SURVEY_2026_09_18_002",
+  "survey_name": "Kadapa - Pulivendla Road - Section B",
+  "date": "2026-09-18T07:40:00Z",
+  "drone_id": "DJI_M300_02",
+  "gsd_cm_per_px": 1.9,
+  "area_covered_sqm": 14200,
+  "segments": [
+    {
+      "segment_id": "SEG_001",
+      "start_lat": 14.4600, "start_lon": 78.7900,
+      "end_lat": 14.4622, "end_lon": 78.7915,
+      "length_m": 260.0,
+      "pdi": 47.0,
+      "thermal_score": 0.55,
+      "defects": [
+        {
+          "defect_id": "DEF_001",
+          "type": "pothole",
+          "lat": 14.4611, "lon": 78.7907,
+          "severity": "high",
+          "area_sqcm": 980.0,
+          "depth_cm": 7.2,
+          "thermal_anomaly": true,
+          "confidence": 0.95
+        }
+      ]
+    },
+    {
+      "segment_id": "SEG_002",
+      "start_lat": 14.4622, "start_lon": 78.7915,
+      "end_lat": 14.4645, "end_lon": 78.7930,
+      "length_m": 275.0,
+      "pdi": 76.0,
+      "thermal_score": 0.22,
+      "defects": [
+        {
+          "defect_id": "DEF_002",
+          "type": "crack",
+          "lat": 14.4633, "lon": 78.7922,
+          "severity": "low",
+          "area_sqcm": 200.0,
+          "depth_cm": 0.6,
+          "thermal_anomaly": false,
+          "confidence": 0.80
+        }
+      ]
+    },
+    {
+      "segment_id": "SEG_003",
+      "start_lat": 14.4645, "start_lon": 78.7930,
+      "end_lat": 14.4668, "end_lon": 78.7946,
+      "length_m": 268.0,
+      "pdi": 22.0,
+      "thermal_score": 0.71,
+      "defects": [
+        {
+          "defect_id": "DEF_003",
+          "type": "pothole",
+          "lat": 14.4654, "lon": 78.7936,
+          "severity": "high",
+          "area_sqcm": 1100.0,
+          "depth_cm": 8.9,
+          "thermal_anomaly": true,
+          "confidence": 0.97
+        },
+        {
+          "defect_id": "DEF_004",
+          "type": "pothole",
+          "lat": 14.4659, "lon": 78.7940,
+          "severity": "high",
+          "area_sqcm": 860.0,
+          "depth_cm": 6.0,
+          "thermal_anomaly": true,
+          "confidence": 0.92
+        },
+        {
+          "defect_id": "DEF_005",
+          "type": "crack",
+          "lat": 14.4663, "lon": 78.7943,
+          "severity": "high",
+          "area_sqcm": 1400.0,
+          "depth_cm": 2.4,
+          "thermal_anomaly": true,
+          "confidence": 0.88
+        }
+      ]
+    },
+    {
+      "segment_id": "SEG_004",
+      "start_lat": 14.4668, "start_lon": 78.7946,
+      "end_lat": 14.4690, "end_lon": 78.7961,
+      "length_m": 262.0,
+      "pdi": 93.0,
+      "thermal_score": 0.05,
+      "defects": []
+    }
+  ]
+}

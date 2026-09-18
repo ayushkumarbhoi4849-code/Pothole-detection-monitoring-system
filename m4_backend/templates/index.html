@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Road Survey Dashboard — M4</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+
+<!-- Toast container -->
+<div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+<!-- Initial loading overlay -->
+<div id="bootOverlay" class="boot-overlay">
+  <div class="boot-spinner"></div>
+  <p>Connecting to M4 server…</p>
+</div>
+
+<header class="topbar">
+  <button id="menuToggle" class="icon-btn mobile-only" aria-label="Toggle menu">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+  </button>
+
+  <div class="brand">
+    <span class="brand-mark">🛣️</span>
+    <div class="brand-text">
+      <h1>Road Survey Dashboard</h1>
+      <span class="brand-sub">M4 · Backend &amp; Web Dashboard</span>
+    </div>
+  </div>
+
+  <div class="topbar-actions">
+    <div class="select-wrap">
+      <label for="surveySelect" class="sr-only">Survey</label>
+      <select id="surveySelect"><option value="">Loading surveys…</option></select>
+    </div>
+    <button id="replayBtn" class="btn btn-primary" title="Replay a recorded survey without needing the drone">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      Replay Demo
+    </button>
+    <button id="themeToggle" class="icon-btn" title="Toggle light/dark theme" aria-label="Toggle theme">
+      <svg id="themeIconMoon" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg id="themeIconSun" width="18" height="18" viewBox="0 0 24 24" fill="none" style="display:none"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <span id="serverStatus" class="status-pill status-unknown">checking…</span>
+  </div>
+</header>
+
+<div id="mobileScrim" class="mobile-scrim"></div>
+
+<main class="layout">
+
+  <!-- LEFT: summary + filters -->
+  <aside class="sidebar" id="sidebar">
+    <button class="panel-close mobile-only" data-close="sidebar" aria-label="Close">✕</button>
+
+    <section class="card">
+      <h2>Survey Info</h2>
+      <div id="surveyInfo" class="kv-list">
+        <p class="muted">Select a survey to see details.</p>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Summary</h2>
+      <div class="stat-grid">
+        <div class="stat">
+          <div class="stat-icon">📊</div>
+          <div class="stat-value" id="statAvgPdi">–</div>
+          <div class="stat-label">Average PDI</div>
+        </div>
+        <div class="stat">
+          <div class="stat-icon">🕳️</div>
+          <div class="stat-value" id="statPotholes">–</div>
+          <div class="stat-label">Potholes</div>
+        </div>
+        <div class="stat">
+          <div class="stat-icon">⚡</div>
+          <div class="stat-value" id="statCracks">–</div>
+          <div class="stat-label">Cracks</div>
+        </div>
+        <div class="stat">
+          <div class="stat-icon">🌡️</div>
+          <div class="stat-value" id="statThermal">–</div>
+          <div class="stat-label">Thermal Anomalies</div>
+        </div>
+      </div>
+      <div id="conditionBreakdown" class="condition-breakdown"></div>
+    </section>
+
+    <section class="card">
+      <h2>Filters</h2>
+      <div class="filter-group">
+        <span class="filter-label">Defect type</span>
+        <label><input type="checkbox" class="filter-type" value="pothole" checked> 🕳️ Pothole</label>
+        <label><input type="checkbox" class="filter-type" value="crack" checked> ⚡ Crack</label>
+        <label><input type="checkbox" class="filter-type" value="raveling" checked> 🪨 Raveling</label>
+        <label><input type="checkbox" class="filter-type" value="patch" checked> 🩹 Patch</label>
+        <label><input type="checkbox" class="filter-type" value="other" checked> ⚠️ Other</label>
+      </div>
+      <div class="filter-group">
+        <span class="filter-label">Severity</span>
+        <label><input type="checkbox" class="filter-severity" value="low" checked> Low</label>
+        <label><input type="checkbox" class="filter-severity" value="moderate" checked> Moderate</label>
+        <label><input type="checkbox" class="filter-severity" value="high" checked> High</label>
+      </div>
+      <div class="filter-group">
+        <label><input type="checkbox" id="thermalOnlyToggle"> 🌡️ Thermal anomalies only</label>
+      </div>
+      <button id="resetFiltersBtn" class="btn btn-ghost btn-small">Reset filters</button>
+    </section>
+  </aside>
+
+  <!-- CENTER: map + table -->
+  <section class="content-wrap">
+
+    <div class="view-tabs">
+      <button class="view-tab active" data-view="map">🗺️ Map</button>
+      <button class="view-tab" data-view="table">📋 Defect List</button>
+    </div>
+
+    <div class="map-wrap" id="mapView">
+      <div id="map"></div>
+
+      <div id="emptyState" class="empty-state" hidden>
+        <div class="empty-state-inner">
+          <div class="empty-emoji">🚧</div>
+          <h2>No survey data yet</h2>
+          <p>Load a recorded survey to see the map come alive — no drone required.</p>
+          <button class="btn btn-primary btn-large" id="emptyStateReplayBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            Replay Demo Survey
+          </button>
+        </div>
+      </div>
+
+      <div id="mapLoading" class="map-loading" hidden>
+        <div class="boot-spinner small"></div>
+      </div>
+
+      <div class="legend card">
+        <strong>Road Condition (PDI)</strong>
+        <div><span class="dot good"></span> Good (80–100)</div>
+        <div><span class="dot moderate"></span> Moderate (50–79)</div>
+        <div><span class="dot severe"></span> Severe (0–49)</div>
+      </div>
+    </div>
+
+    <div class="table-wrap card" id="tableView" hidden>
+      <div class="table-toolbar">
+        <input type="search" id="defectSearch" placeholder="Search defects (type, severity, segment)…" />
+        <span id="tableCount" class="muted"></span>
+      </div>
+      <div class="table-scroll">
+        <table id="defectTable">
+          <thead>
+            <tr>
+              <th data-sort="type">Type</th>
+              <th data-sort="severity">Severity</th>
+              <th data-sort="segment_id">Segment</th>
+              <th data-sort="area_sqcm">Area (cm²)</th>
+              <th data-sort="depth_cm">Depth (cm)</th>
+              <th data-sort="thermal_anomaly">Thermal</th>
+              <th data-sort="confidence">Confidence</th>
+            </tr>
+          </thead>
+          <tbody id="defectTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- RIGHT: detail panel -->
+  <aside class="detail-panel" id="detailPanel">
+    <button class="panel-close mobile-only" data-close="detailPanel" aria-label="Close">✕</button>
+    <h2>Details</h2>
+    <div id="detailContent">
+      <p class="muted">Click a road segment or a defect marker on the map (or a row in the table) to see its measurements here.</p>
+    </div>
+  </aside>
+
+</main>
+
+<footer class="statusbar">
+  <span>Pipeline: M3 JSON → Flask → SQLite → REST API → Leaflet</span>
+  <span id="lastUpdated" class="muted"></span>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
